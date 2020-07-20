@@ -34,7 +34,7 @@ return <div className="form">
             </li>
             <li>
                 {loading && <div>Loading..</div>}
-                {error && <div>{error}</div>}
+                {error && <div>Invalid Email and Password </div>}
             </li>
             <li>
                 <label htmlFor="email">

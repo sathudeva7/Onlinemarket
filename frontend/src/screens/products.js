@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { signin } from '../actions/userAction';
+
 import { saveProduct, listProducts,deleteProduct } from '../actions/productAction';
+import axios from 'axios';
+
 function Products(props){
     const [modalVisible, setModalVisible] = useState(false);
     const [id, setId] = useState('');
@@ -18,12 +19,13 @@ function Products(props){
     const productList = useSelector(state=>state.productList)
     const {loading,products,error} = productList;
     const productSave = useSelector(state => state.productSave);
-    
+    const [photo,setPhoto] = useState('');
+  
     const { loading: loadingSave, success:successSave, error:errorSave} = productSave;
     const productDelete = useSelector(state => state.productDelete); 
     const { loading: loadingDelete, success:successDelete, error:errorDelete} = productDelete;
     const dispatch = useDispatch();
-
+    
      useEffect(() => {
          if(successSave){
              setModalVisible(false);
@@ -47,8 +49,11 @@ function Products(props){
         
      }
 
+
+
      const submitHandler = (e) => {
          e.preventDefault();
+         
          dispatch(saveProduct({
             _id:id, 
             name,price,image,brand,category,countInStock,description}));
@@ -57,6 +62,21 @@ function Products(props){
      const deleteHandler = (product) => {
          dispatch(deleteProduct(product._id))
      }
+
+     const uploadFilehandler = (e) => {
+        const file = e.target.files[0];
+        const bodyFormData = new FormData();
+        bodyFormData.append('image',file);
+        axios.post("/api/uploads", bodyFormData,{
+            headers:{
+                'Content-Type': 'multipart/form-data'
+            }
+            
+        }).then(response => {
+            setImage(response.data);
+        })
+     }
+     
 return <div className="content content-margined">
     <div className="product-header">
         <h3>Products</h3>
@@ -72,7 +92,7 @@ return <div className="content content-margined">
             </li>
             <li>
                 {loadingSave && <div>Loading..</div>}
-                {errorSave && <div>{errorSave}</div>}
+                {errorSave && <div>Only Admin can Edit</div>}
             </li>
             <li>
                 <label htmlFor="name">
@@ -93,7 +113,10 @@ return <div className="content content-margined">
                     Image
                 </label>
                 <input type="text" name="image" id="image"value={image} onChange={(e) => setImage(e.target.value)}></input>
-      
+                
+                            <input type="file"  onChange={uploadFilehandler}   />
+                            
+                       
            
             </li>
            

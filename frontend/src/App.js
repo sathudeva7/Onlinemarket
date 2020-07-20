@@ -37,6 +37,10 @@ function App() {
             {
               userInfo ? <Link to="/profile">{userInfo.name}</Link> : <Link to ="/signin">Signin</Link>
            }
+           {
+              userInfo ? <Link to="/products">Add Products</Link> : <Link to ="/signin">Admin</Link> 
+           }
+           
            
             
           </div> 
