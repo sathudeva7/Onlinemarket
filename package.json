@@ -20,7 +20,11 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
-    "start": "nodemon --watch backend --exec babel-node backend/server.js"
+    "start": "nodemon --watch backend --exec babel-node backend/server.js",
+    "build":"cd frontend && npm run build",
+    "install-frontend":"cd frontend && npm install",
+    "heroku-postbuild":"npm run install-frontend && npm run build",
+    "frontend":"cd frontend && npm start"
   },
   
   "eslintConfig": {
